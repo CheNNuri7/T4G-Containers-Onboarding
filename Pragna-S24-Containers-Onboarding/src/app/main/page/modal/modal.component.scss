@@ -1,0 +1,91 @@
+:host {
+  @import url(//fonts.googleapis.com/css?family=Montserrat);
+  * {
+    font-family: "Montserrat";
+    margin-right: 20px;
+  }
+  display: block;
+  .modal {
+    border: white 10px solid;
+    background-color: white;
+    width: 367px;
+    height: 400px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0px 4px 4px 0px gray;
+    position: relative;
+    width: 100%;
+
+    .close-button{
+      width:25px;
+      height:25px;
+      position: absolute;
+      right:10px;
+      top: 20px;
+      cursor: pointer;
+    }
+
+    h1{
+      font-size: 25px;
+      color: #EE8B72;
+      margin-left: 30px;
+      margin-top: 60px;
+    }
+
+    .goal1{
+      display:grid;
+      margin: 15px 0px 0px 30px;
+
+      .year1{
+        font-size: 18px;
+        color: #EE8B72;
+      }
+
+      .goal1-desc{
+        #g1{
+          width: 287px;
+          height: 50px;
+          margin-top: 15px;
+          border-radius: 10px;
+          border-color: #fff;
+        }
+      }
+    }
+
+    .goal2{
+      display: grid;
+      margin: 20px 0px 0px 30px;
+      .year5{
+        font-size: 18px;
+        color: #EE8B72;
+      }
+
+      .goal2-desc{
+        #g2{
+          width: 287px;
+          height: 50px;
+          margin-top: 15px;
+          border-radius: 10px;
+          border-color: #fff;
+        }
+      }
+    }
+
+    button{
+      width:70px;
+      height:45px;
+      position: absolute;
+      right:10px;
+      bottom: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 10px;
+      background-color: #EE8B72;
+      color:#fff;
+      font-weight: bold;
+      border-color: #fff;
+    }
+  }
+}
+
+
