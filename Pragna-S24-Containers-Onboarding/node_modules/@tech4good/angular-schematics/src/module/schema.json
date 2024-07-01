@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "ModuleSchema",
+  "title": "Module Schema",
+  "type": "object",
+  "description": "Creates a new module in the default project.",
+  "properties": {
+    "index": {
+      "type": "number",
+      "default": 1
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the module.",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the module?"
+    },
+    "lazyLoading": {
+      "type": "boolean",
+      "description": "Have it lazy loaded.",
+      "default": false,
+      "x-prompt": "Would you like the module to be lazy loaded?"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

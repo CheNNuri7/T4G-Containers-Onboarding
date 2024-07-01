@@ -1,0 +1,24 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { EffectsModule } from '@ngrx/effects';
+import { SharedModule } from '../shared/shared.module';
+import { <%= classify(name) %>RoutingModule } from './<%= dasherize(name) %>-routing.module';
+
+// Containers
+
+// Components
+
+@NgModule({
+  imports: [
+    CommonModule,
+    SharedModule,
+    <%= classify(name) %>RoutingModule,
+    EffectsModule.forFeature([
+    ]),
+  ],
+  declarations: [
+    // Containers
+    // Components
+  ],
+})
+export class <%= classify(name) %>Module { }

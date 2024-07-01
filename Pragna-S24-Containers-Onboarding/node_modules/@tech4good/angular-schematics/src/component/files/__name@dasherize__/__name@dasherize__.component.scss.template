@@ -1,0 +1,7 @@
+:host {
+  display: block;
+  .<%= dasherize(name) %>-container {
+    // REMOVE WHEN FINISHING LAYOUT STYLES
+    border: 1px solid black;
+  }
+}

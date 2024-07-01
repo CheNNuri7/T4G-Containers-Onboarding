@@ -1,0 +1,7 @@
+import { Timestamp } from '@angular/fire/firestore';
+
+export interface <%= classify(name) %> {
+  __id: string;
+  _createdAt?: Timestamp;
+  _updatedAt?: Timestamp;
+}

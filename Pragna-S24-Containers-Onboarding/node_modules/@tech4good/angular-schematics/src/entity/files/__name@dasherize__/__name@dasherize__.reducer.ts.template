@@ -1,0 +1,51 @@
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { <%= classify(name) %> } from './<%= dasherize(name) %>.model';
+import { <%= classify(name) %>Actions, <%= classify(name) %>ActionTypes } from './<%= dasherize(name) %>.actions';
+import { createFeatureSelector } from '@ngrx/store';
+
+export interface State extends EntityState<<%= classify(name) %>> {
+  // additional entities state properties
+}
+
+export const adapter: EntityAdapter<<%= classify(name) %>> = createEntityAdapter<<%= classify(name) %>>({
+  selectId: (<%= camelize(name) %>: <%= classify(name) %>) => <%= camelize(name) %>.__id,
+  sortComparer: false,
+});
+
+export const initialState: State = adapter.getInitialState({
+  // additional entity state properties
+});
+
+export function reducer(
+  state: State = initialState,
+  action: <%= classify(name) %>Actions,
+) {
+  switch (action.type) {
+    case <%= classify(name) %>ActionTypes.ADDED:
+      return adapter.upsertOne(action.payload, state);
+
+    case <%= classify(name) %>ActionTypes.LOADED:
+      return adapter.upsertMany(action.payload, state);
+
+    case <%= classify(name) %>ActionTypes.MODIFIED:
+      return adapter.updateOne({
+        id: action.payload.__id,
+        changes: action.payload,
+      }, state);
+
+    case <%= classify(name) %>ActionTypes.REMOVED:
+      return adapter.removeOne(action.payload.__id, state);
+
+    default:
+      return state;
+  }
+}
+
+export const get<%= classify(name) %>State = createFeatureSelector<State>('<%= camelize(name) %>');
+
+export const {
+  selectIds,
+  selectEntities,
+  selectAll,
+  selectTotal,
+} = adapter.getSelectors(get<%= classify(name) %>State);

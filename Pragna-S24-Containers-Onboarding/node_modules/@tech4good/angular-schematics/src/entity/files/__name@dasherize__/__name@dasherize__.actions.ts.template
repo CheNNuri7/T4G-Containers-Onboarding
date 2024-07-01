@@ -1,0 +1,270 @@
+import { Action } from '@ngrx/store';
+import { LoadAction } from '../app.actions';
+import { <%= classify(name) %> } from './<%= dasherize(name) %>.model';
+
+export enum <%= classify(name) %>ActionTypes {
+  STREAM = '[<%= classify(name) %>] stream <%= camelize(name) %>',
+  STREAM_SUCCESS = '[<%= classify(name) %>] stream <%= camelize(name) %> success',
+  STREAM_FAIL = '[<%= classify(name) %>] stream <%= camelize(name) %> fail',
+  LOAD = '[<%= classify(name) %>] load <%= camelize(name) %>',
+  LOAD_SUCCESS = '[<%= classify(name) %>] load <%= camelize(name) %> success',
+  LOAD_FAIL = '[<%= classify(name) %>] load <%= camelize(name) %> fail',
+  ADD = '[<%= classify(name) %>] add <%= camelize(name) %>',
+  ADD_SUCCESS = '[<%= classify(name) %>] add <%= camelize(name) %> success',
+  ADD_FAIL = '[<%= classify(name) %>] add <%= camelize(name) %> fail',
+  UPDATE = '[<%= classify(name) %>] update <%= camelize(name) %>',
+  UPDATE_SUCCESS = '[<%= classify(name) %>] update <%= camelize(name) %> success',
+  UPDATE_FAIL = '[<%= classify(name) %>] update <%= camelize(name) %> fail',
+  UPSERT = '[<%= classify(name) %>] upsert <%= camelize(name) %>',
+  UPSERT_SUCCESS = '[<%= classify(name) %>] upsert <%= camelize(name) %> success',
+  UPSERT_FAIL = '[<%= classify(name) %>] upsert <%= camelize(name) %> fail',
+  REMOVE = '[<%= classify(name) %>] remove <%= camelize(name) %>',
+  REMOVE_SUCCESS = '[<%= classify(name) %>] remove <%= camelize(name) %> success',
+  REMOVE_FAIL = '[<%= classify(name) %>] remove <%= camelize(name) %> fail',
+  LOADED = '[<%= classify(name) %>] loaded',
+  ADDED = '[<%= classify(name) %>] added',
+  MODIFIED = '[<%= classify(name) %>] modified',
+  REMOVED = '[<%= classify(name) %>] removed',
+}
+
+// See Firebase Docs for current constraints on valid queries
+export class Stream<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.STREAM;
+  constructor(
+    // property, comparator, value
+    public queryParams: [string, string, any][],
+    public queryOptions: {
+      orderBy?: string | [string, string],
+      limit?: number,
+      startAt?: string,
+      startAfter?: string,
+      endAt?: string,
+      endBefore?: string,
+    },
+    public correlationId: string,
+    public followupActions?: (<%= camelize(name) %>: <%= classify(name) %>) => LoadAction[],
+  ) {}
+}
+
+export class Stream<%= classify(name) %>Success implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.STREAM_SUCCESS;
+  constructor(
+    public queryParams: [string, string, any][],
+    public queryOptions: {
+      orderBy?: string | [string, string],
+      limit?: number,
+      startAt?: string,
+      startAfter?: string,
+      endAt?: string,
+      endBefore?: string,
+    },
+    public correlationId: string,
+    public followupActions?: (<%= camelize(name) %>: <%= classify(name) %>) => LoadAction[],
+  ) {}
+}
+
+export class Stream<%= classify(name) %>Fail implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.STREAM_FAIL;
+  constructor(
+    public error: any,
+    public correlationId?: string,
+  ) {}
+}
+
+
+export class Load<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.LOAD;
+  constructor(
+    // property, comparator, value
+    public queryParams: [string, string, any][],
+    public queryOptions: {
+      orderBy?: string | [string, string],
+      limit?: number,
+      startAt?: string,
+      startAfter?: string,
+      endAt?: string,
+      endBefore?: string,
+    },
+    public correlationId: string,
+    public followupActions?: (<%= camelize(name) %>: <%= classify(name) %>) => LoadAction[],
+  ) {}
+}
+
+export class Load<%= classify(name) %>Success implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.LOAD_SUCCESS;
+  constructor(
+    public queryParams: [string, string, any][],
+    public queryOptions: {
+      orderBy?: string | [string, string],
+      limit?: number,
+      startAt?: string,
+      startAfter?: string,
+      endAt?: string,
+      endBefore?: string,
+    },
+    public correlationId: string,
+    public followupActions?: (<%= camelize(name) %>: <%= classify(name) %>) => LoadAction[],
+  ) {}
+}
+
+export class Load<%= classify(name) %>Fail implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.LOAD_FAIL;
+  constructor(
+    public error: any,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Add<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.ADD;
+  constructor(
+    public <%= camelize(name) %>: <%= classify(name) %>,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Add<%= classify(name) %>Success implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.ADD_SUCCESS;
+  constructor(
+    public <%= camelize(name) %>: <%= classify(name) %>,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Add<%= classify(name) %>Fail implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.ADD_FAIL;
+  constructor(
+    public error: any,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Update<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.UPDATE;
+  constructor(
+    public __id: string,
+    public changes: Partial<<%= classify(name) %>>,
+    public correlationId?: string,
+  ) { }
+}
+
+export class Update<%= classify(name) %>Success implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.UPDATE_SUCCESS;
+  constructor(
+    public __id: string,
+    public changes: Partial<<%= classify(name) %>>,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Update<%= classify(name) %>Fail implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.UPDATE_FAIL;
+  constructor(
+    public error: any,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Upsert<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.UPSERT;
+  constructor(
+    public <%= camelize(name) %>: <%= classify(name) %>,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Upsert<%= classify(name) %>Success implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.UPSERT_SUCCESS;
+  constructor(
+    public <%= camelize(name) %>: <%= classify(name) %>,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Upsert<%= classify(name) %>Fail implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.UPSERT_FAIL;
+  constructor(
+    public error: any,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Remove<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.REMOVE;
+  constructor(
+    public __id: string,
+    public correlationId?: string,
+  ) { }
+}
+
+export class Remove<%= classify(name) %>Success implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.REMOVE_SUCCESS;
+  constructor(
+    public __id: string,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Remove<%= classify(name) %>Fail implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.REMOVE_FAIL;
+  constructor(
+    public error: any,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Loaded<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.LOADED;
+  constructor(
+    public payload: <%= classify(name) %>[],
+    public correlationId?: string,
+  ) {}
+}
+
+export class Added<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.ADDED;
+  constructor(
+    public payload: <%= classify(name) %>,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Modified<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.MODIFIED;
+  constructor(
+    public payload: <%= classify(name) %>,
+    public correlationId?: string,
+  ) {}
+}
+
+export class Removed<%= classify(name) %> implements Action {
+  readonly type = <%= classify(name) %>ActionTypes.REMOVED;
+  constructor(
+    public payload: <%= classify(name) %>,
+    public correlationId?: string,
+  ) {}
+}
+
+export type <%= classify(name) %>Actions =
+  Stream<%= classify(name) %> |
+  Stream<%= classify(name) %>Success |
+  Stream<%= classify(name) %>Fail |
+  Load<%= classify(name) %> |
+  Load<%= classify(name) %>Success |
+  Load<%= classify(name) %>Fail |
+  Add<%= classify(name) %> |
+  Add<%= classify(name) %>Success |
+  Add<%= classify(name) %>Fail |
+  Update<%= classify(name) %> |
+  Update<%= classify(name) %>Success |
+  Update<%= classify(name) %>Fail |
+  Upsert<%= classify(name) %> |
+  Upsert<%= classify(name) %>Success |
+  Upsert<%= classify(name) %>Fail |
+  Remove<%= classify(name) %> |
+  Remove<%= classify(name) %>Success |
+  Remove<%= classify(name) %>Fail |
+  Loaded<%= classify(name) %> |
+  Added<%= classify(name) %> |
+  Modified<%= classify(name) %> |
+  Removed<%= classify(name) %>;

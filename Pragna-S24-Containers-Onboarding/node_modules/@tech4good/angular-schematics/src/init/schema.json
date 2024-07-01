@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "InitSchema",
+  "title": "Init Schema",
+  "type": "object",
+  "description": "Adds initial project files to a newly created repo.",
+  "properties": {
+    "index": {
+      "type": "number",
+      "default": 1
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "proceed": {
+      "type": "boolean",
+      "x-prompt": "This schematic is only designed for generating initial files on a FRESH repo created from ng new. If you use this outside of that context, YOU WILL OVERWRITE parts of your existing code. Are you sure you want to proceed?"
+    }
+
+  },
+  "required": [
+    "project"
+  ]
+}

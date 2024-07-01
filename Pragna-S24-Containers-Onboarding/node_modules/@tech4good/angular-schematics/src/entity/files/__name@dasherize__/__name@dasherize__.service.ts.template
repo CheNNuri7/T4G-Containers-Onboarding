@@ -1,0 +1,50 @@
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { CachedSelectorsService } from '../cached-selectors.service';
+import { FirebaseService } from '../../firebase/firebase.service';
+import { <%= classify(name) %> } from './<%= dasherize(name) %>.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class <%= classify(name) %>Service {
+  constructor(
+    private cs: CachedSelectorsService,
+    private db: FirebaseService,
+  ) { }
+
+  /** Select a <%= camelize(name) %> from the store. */
+  public select<%= classify(name) %> = <T extends <%= classify(name) %>>(
+    id: string,
+    correlationId: string,
+    childrenFn?: (e: <%= classify(name) %>) => { [index: string]: Observable<any> },
+  ): Observable<T> => {
+    return this.cs.selectEntityObj<<%= classify(name) %>, T>('<%= camelize(name) %>', id, correlationId, childrenFn);
+  };
+
+  /** Select <%= camelize(name) %>s from the store. */
+  public select<%= classify(name) %>s = <T extends <%= classify(name) %>>(
+    queryParams: [string, string, any][],
+    correlationId: string,
+    childrenFn?: (e: <%= classify(name) %>) => { [index: string]: Observable<any> },
+  ): Observable<Array<T>> => {
+    return this.cs.selectEntityList<<%= classify(name) %>, T>('<%= camelize(name) %>', queryParams, correlationId, childrenFn);
+  };
+
+  /** Get a <%= camelize(name) %> directly from the database. */
+  public get<%= classify(name) %> = <T extends <%= classify(name) %>>(
+    id: string,
+    childrenFn?: (e: <%= classify(name) %>) => { [index: string]: Observable<any> },
+  ): Observable<T> => {
+    return this.db.queryObjOnce<<%= classify(name) %>, T>('<%= camelize(name) %>s', id, childrenFn);
+  };
+
+  /** Get <%= camelize(name) %>s directly from the database. */
+  public get<%= classify(name) %>s = <T extends <%= classify(name) %>>(
+    queryParams: [string, string, any][],
+    queryOptions?: { [index: string]: any },
+    childrenFn?: (e: <%= classify(name) %>) => { [index: string]: Observable<any> },
+  ): Observable<Array<T>> => {
+    return this.db.queryListOnce<<%= classify(name) %>, T>('<%= camelize(name) %>s', queryParams, queryOptions, childrenFn);
+  };
+}

@@ -1,0 +1,131 @@
+import { Injectable } from '@angular/core';
+import { Action } from '@ngrx/store';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { EMPTY, of, Observable, throwError, forkJoin, from, pipe, merge } from 'rxjs';
+import { switchMap, flatMap, mergeMap, map, catchError, tap, take } from 'rxjs/operators';
+import { FirebaseService } from '../../firebase/firebase.service';
+import { CachedLoadConnectionsService } from '../cached-load-connections.service';
+
+import { <%= classify(name) %> } from './<%= dasherize(name) %>.model';
+import { <%= classify(name) %>ActionTypes, <%= classify(name) %>Actions,
+  Stream<%= classify(name) %>, Stream<%= classify(name) %>Success, Stream<%= classify(name) %>Fail,
+  Load<%= classify(name) %>, Load<%= classify(name) %>Success, Load<%= classify(name) %>Fail,
+  Add<%= classify(name) %>, Add<%= classify(name) %>Success, Add<%= classify(name) %>Fail,
+  Update<%= classify(name) %>, Update<%= classify(name) %>Success, Update<%= classify(name) %>Fail,
+  Upsert<%= classify(name) %>, Upsert<%= classify(name) %>Success, Upsert<%= classify(name) %>Fail,
+  Remove<%= classify(name) %>, Remove<%= classify(name) %>Success, Remove<%= classify(name) %>Fail } from './<%= dasherize(name) %>.actions';
+
+@Injectable()
+export class <%= classify(name) %>Effects {
+  /** Process the stream action to create firebase connections. */
+  stream$: Observable<Action> = createEffect(
+    () => this.actions$.pipe(
+      ofType<Stream<%= classify(name) %>>(<%= classify(name) %>ActionTypes.STREAM),
+      mergeMap((action: Stream<%= classify(name) %>) => {
+        const connection = this.clc.processLoadAction(action);
+        return connection.loadStream.pipe(
+          take(1),
+          map(() => new Stream<%= classify(name) %>Success(action.queryParams, action.queryOptions, action.correlationId, action.followupActions)),
+          catchError((error) => of(new Stream<%= classify(name) %>Fail(error, action.correlationId))),
+        );
+      }),
+    ),
+  );
+
+  /** Process the load action to create firebase connections. */
+  load$: Observable<Action> = createEffect(
+    () => this.actions$.pipe(
+      ofType<Load<%= classify(name) %>>(<%= classify(name) %>ActionTypes.LOAD),
+      mergeMap((action: Load<%= classify(name) %>) => {
+        const connection = this.clc.processLoadAction(action);
+        return connection.loadStream.pipe(
+          take(1),
+          map(() => new Load<%= classify(name) %>Success(action.queryParams, action.queryOptions, action.correlationId, action.followupActions)),
+          catchError((error) => of(new Load<%= classify(name) %>Fail(error, action.correlationId))),
+        );
+      }),
+    ),
+  );
+
+  /** Process the add action to update database and initiate callbacks. */
+  add$: Observable<Action> = createEffect(
+    () => this.actions$.pipe(
+      ofType<Add<%= classify(name) %>>(<%= classify(name) %>ActionTypes.ADD),
+      mergeMap((action: Add<%= classify(name) %>) => {
+        return this.db.addEntity('<%= camelize(name) %>s', action.<%= camelize(name) %>).pipe(
+          mergeMap(() => merge(
+            of(new Add<%= classify(name) %>Success(action.<%= camelize(name) %>, action.correlationId)),
+            this.actionsOnAdd(action),
+          )),
+          catchError((error) => of(new Add<%= classify(name) %>Fail(error, action.correlationId))),
+        );
+      }),
+    ),
+  );
+
+  /** Process the update action to update database and initiate callbacks. */
+  update$: Observable<Action> = createEffect(
+    () => this.actions$.pipe(
+      ofType<Update<%= classify(name) %>>(<%= classify(name) %>ActionTypes.UPDATE),
+      mergeMap((action: Update<%= classify(name) %>) => {
+        return this.db.updateEntity('<%= camelize(name) %>s', action.__id, action.changes).pipe(
+          mergeMap(() => merge(
+            of(new Update<%= classify(name) %>Success(action.__id, action.changes, action.correlationId)),
+            this.actionsOnUpdate(action),
+          )),
+          catchError((error) => of(new Update<%= classify(name) %>Fail(error, action.correlationId))),
+        );
+      }),
+    ),
+  );
+
+  /** Process the upsert action to update database and initiate callbacks. */
+  upsert$: Observable<Action> = createEffect(
+    () => this.actions$.pipe(
+      ofType<Upsert<%= classify(name) %>>(<%= classify(name) %>ActionTypes.UPSERT),
+      mergeMap((action: Upsert<%= classify(name) %>) => {
+        return this.db.upsertEntity('<%= camelize(name) %>s', action.<%= camelize(name) %>).pipe(
+          mergeMap((results) => merge(
+            of(new Upsert<%= classify(name) %>Success(action.<%= camelize(name) %>, action.correlationId)),
+            results.type === 'add' ? this.actionsOnAdd(new Add<%= classify(name) %>(action.<%= camelize(name) %>, action.correlationId)) : this.actionsOnUpdate(new Update<%= classify(name) %>(action.<%= camelize(name) %>.__id, action.<%= camelize(name) %>, action.correlationId)),
+          )),
+          catchError((error) => of(new Upsert<%= classify(name) %>Fail(error, action.correlationId))),
+        );
+      }),
+    ),
+  );
+
+  /** Process the remove action to update database and initiate callbacks. */
+  remove$: Observable<Action> = createEffect(
+    () => this.actions$.pipe(
+      ofType<Remove<%= classify(name) %>>(<%= classify(name) %>ActionTypes.REMOVE),
+      mergeMap((action: Remove<%= classify(name) %>) => {
+        return this.db.removeEntity('<%= camelize(name) %>s', action.__id).pipe(
+          mergeMap(() => merge(
+            of(new Remove<%= classify(name) %>Success(action.__id, action.correlationId)),
+            this.actionsOnRemove(action),
+          )),
+          catchError((error) => of(new Remove<%= classify(name) %>Fail(error, action.correlationId))),
+        );
+      }),
+    ),
+  );
+
+  actionsOnAdd(action: Add<%= classify(name) %>): Observable<Action> {
+    return EMPTY;
+  }
+
+  actionsOnUpdate(action: Update<%= classify(name) %>): Observable<Action> {
+    return EMPTY;
+  }
+
+  actionsOnRemove(action: Remove<%= classify(name) %>): Observable<Action> {
+    return EMPTY;
+  }
+
+  constructor(
+    private actions$: Actions,
+    private db: FirebaseService,
+    private clc: CachedLoadConnectionsService,
+  ) {}
+}
